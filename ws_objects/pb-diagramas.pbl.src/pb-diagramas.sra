@@ -13,6 +13,7 @@ end forward
 global variables
 String url
 end variables
+
 global type pb-diagramas from application
 string appname = "pb-diagramas"
 string themepath = "C:\Program Files (x86)\Appeon\PowerBuilder 21.0\IDE\theme"
@@ -48,7 +49,7 @@ destroy(error)
 destroy(message)
 end on
 
-event open;url = 'http://192.168.100.2:3000/proceso'
+event open;url = 'http://192.168.100.2:3000/'
 open (w_frame )
 end event
 

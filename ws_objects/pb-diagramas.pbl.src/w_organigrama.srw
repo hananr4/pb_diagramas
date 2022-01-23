@@ -1,41 +1,29 @@
-﻿$PBExportHeader$w_proceso.srw
+﻿$PBExportHeader$w_organigrama.srw
 forward
-global type w_proceso from window
+global type w_organigrama from window
 end type
-type tab_1 from tab within w_proceso
+type tab_1 from tab within w_organigrama
 end type
 type tabpage_1 from userobject within tab_1
+end type
+type cb_3 from commandbutton within tabpage_1
 end type
 type cb_8 from commandbutton within tabpage_1
 end type
 type cb_7 from commandbutton within tabpage_1
 end type
-type cb_6 from commandbutton within tabpage_1
-end type
-type cb_5 from commandbutton within tabpage_1
-end type
-type cb_4 from commandbutton within tabpage_1
-end type
-type cb_3 from commandbutton within tabpage_1
-end type
 type cb_2 from commandbutton within tabpage_1
 end type
 type cb_1 from commandbutton within tabpage_1
 end type
-type dw_2 from datawindow within tabpage_1
-end type
 type dw_1 from datawindow within tabpage_1
 end type
 type tabpage_1 from userobject within tab_1
+cb_3 cb_3
 cb_8 cb_8
 cb_7 cb_7
-cb_6 cb_6
-cb_5 cb_5
-cb_4 cb_4
-cb_3 cb_3
 cb_2 cb_2
 cb_1 cb_1
-dw_2 dw_2
 dw_1 dw_1
 end type
 type tabpage_2 from userobject within tab_1
@@ -45,17 +33,17 @@ end type
 type tabpage_2 from userobject within tab_1
 wb_1 wb_1
 end type
-type tab_1 from tab within w_proceso
+type tab_1 from tab within w_organigrama
 tabpage_1 tabpage_1
 tabpage_2 tabpage_2
 end type
 end forward
 
-global type w_proceso from window
+global type w_organigrama from window
 integer width = 5248
 integer height = 1980
 boolean titlebar = true
-string title = "Procesos"
+string title = "Organigrama"
 boolean controlmenu = true
 boolean minbox = true
 boolean maxbox = true
@@ -65,24 +53,37 @@ string icon = "AppIcon!"
 boolean center = true
 tab_1 tab_1
 end type
-global w_proceso w_proceso
+global w_organigrama w_organigrama
 
-on w_proceso.create
+on w_organigrama.create
 this.tab_1=create tab_1
 this.Control[]={this.tab_1}
 end on
 
-on w_proceso.destroy
+on w_organigrama.destroy
 destroy(this.tab_1)
 end on
 
 event resize;this.tab_1.resize (newwidth, newheight)
-this.tab_1.tabpage_1.dw_1.resize (this.tab_1.tabpage_1.dw_1.width, newheight - 350)
-this.tab_1.tabpage_1.dw_2.resize (this.tab_1.tabpage_1.dw_2.width, newheight - 350)
+this.tab_1.tabpage_1.dw_1.resize (newwidth -350, newheight - 350)
+
 this.tab_1.tabpage_2.wb_1.resize (newwidth - 250, newheight - 250)
 end event
 
-type tab_1 from tab within w_proceso
+event open;
+tab_1.tabpage_1.dw_1.Reset()
+tab_1.tabpage_1.dw_1.importFile(Text!, 'organigrama.txt')
+tab_1.tabpage_1.dw_1.sort()
+
+DataWindowChild dwc
+tab_1.tabpage_1.dw_1.GetChild('id_superior', dwc)
+dwc.Reset()
+dwc.importFile(Text!, 'organigrama.txt')
+dwc.sort()
+
+end event
+
+type tab_1 from tab within w_organigrama
 integer width = 5211
 integer height = 1808
 integer taborder = 10
@@ -112,16 +113,14 @@ destroy(this.tabpage_1)
 destroy(this.tabpage_2)
 end on
 
-event selectionchanging;string ls_actividades, ls_secuencias 
-int rc
+event selectionchanging;string ls_organigrama 
 
 if newindex = 2 then 
-	ls_actividades = tab_1.tabpage_1.dw_1.ExportJson()
-	ls_secuencias = tab_1.tabpage_1.dw_2.ExportJson()
+	ls_organigrama = tab_1.tabpage_1.dw_1.ExportJson()
 	
 	String ls_url 
-	ls_url += url + 'proceso?actividades='+ls_actividades + '&secuenciales=' + ls_secuencias
-	rc = tab_1.tabpage_2.wb_1.Navigate (ls_url)
+	ls_url += url + 'organigrama?organigrama='+ls_organigrama 
+	tab_1.tabpage_2.wb_1.Navigate (ls_url)
 	
 	
 End If	
@@ -136,56 +135,63 @@ integer y = 112
 integer width = 5175
 integer height = 1680
 long backcolor = 16777215
-string text = "Proceso"
+string text = "Organigrama"
 long tabtextcolor = 33554432
 long picturemaskcolor = 536870912
+cb_3 cb_3
 cb_8 cb_8
 cb_7 cb_7
-cb_6 cb_6
-cb_5 cb_5
-cb_4 cb_4
-cb_3 cb_3
 cb_2 cb_2
 cb_1 cb_1
-dw_2 dw_2
 dw_1 dw_1
 end type
 
 on tabpage_1.create
+this.cb_3=create cb_3
 this.cb_8=create cb_8
 this.cb_7=create cb_7
-this.cb_6=create cb_6
-this.cb_5=create cb_5
-this.cb_4=create cb_4
-this.cb_3=create cb_3
 this.cb_2=create cb_2
 this.cb_1=create cb_1
-this.dw_2=create dw_2
 this.dw_1=create dw_1
-this.Control[]={this.cb_8,&
+this.Control[]={this.cb_3,&
+this.cb_8,&
 this.cb_7,&
-this.cb_6,&
-this.cb_5,&
-this.cb_4,&
-this.cb_3,&
 this.cb_2,&
 this.cb_1,&
-this.dw_2,&
 this.dw_1}
 end on
 
 on tabpage_1.destroy
+destroy(this.cb_3)
 destroy(this.cb_8)
 destroy(this.cb_7)
-destroy(this.cb_6)
-destroy(this.cb_5)
-destroy(this.cb_4)
-destroy(this.cb_3)
 destroy(this.cb_2)
 destroy(this.cb_1)
-destroy(this.dw_2)
 destroy(this.dw_1)
 end on
+
+type cb_3 from commandbutton within tabpage_1
+integer x = 1723
+integer width = 402
+integer height = 112
+integer taborder = 60
+integer textsize = -10
+integer weight = 400
+fontcharset fontcharset = ansi!
+fontpitch fontpitch = variable!
+fontfamily fontfamily = swiss!
+string facename = "Tahoma"
+string text = "Limpiar"
+end type
+
+event clicked;dw_1.Reset()
+
+DataWindowChild dwc
+tab_1.tabpage_1.dw_1.GetChild('id_superior', dwc)
+dwc.Reset()
+dwc.sort()
+
+end event
 
 type cb_8 from commandbutton within tabpage_1
 integer x = 1307
@@ -221,104 +227,21 @@ string text = "Nueva"
 end type
 
 event clicked;int row
-row = dw_1.RowCount()
-if row < 1 then row = 0
-dw_1.InsertRow(row + 1)
+DatawindowChild dwc
 
 
-end event
-
-type cb_6 from commandbutton within tabpage_1
-integer x = 3255
-integer width = 402
-integer height = 112
-integer taborder = 40
-integer textsize = -10
-integer weight = 400
-fontcharset fontcharset = ansi!
-fontpitch fontpitch = variable!
-fontfamily fontfamily = swiss!
-string facename = "Tahoma"
-string text = "Borrar"
-end type
-
-event clicked;int row
-row = dw_2.GetRow()
-if row > 0 Then dw_2.DeleteRow(row)
-end event
-
-type cb_5 from commandbutton within tabpage_1
-integer x = 2839
-integer width = 402
-integer height = 112
-integer taborder = 30
-integer textsize = -10
-integer weight = 400
-fontcharset fontcharset = ansi!
-fontpitch fontpitch = variable!
-fontfamily fontfamily = swiss!
-string facename = "Tahoma"
-string text = "Nueva"
-end type
-
-event clicked;
-
-
-DataWindowChild dwc
-dw_2.GetChild('id_actividad_desde', dwc)
-dwc.Reset()
-dw_1.RowsCopy(1, &
-      dw_1.RowCount(), Primary!, dwc, 1, Primary!)
-dwc.sort()
-
-dw_2.GetChild('id_actividad_hasta', dwc)
+dw_1.GetChild('id_superior', dwc)
 dwc.Reset()
 
 dw_1.RowsCopy(1, &
       dw_1.RowCount(), Primary!, dwc, 1, Primary!)
 		
-dwc.sort()
 
-int row
-row = dw_2.RowCount()
+row = dw_1.RowCount()
 if row < 1 then row = 0
-dw_2.InsertRow(row)
-end event
+dw_1.InsertRow(row + 1)
 
-type cb_4 from commandbutton within tabpage_1
-integer x = 2423
-integer width = 402
-integer height = 112
-integer taborder = 30
-integer textsize = -10
-integer weight = 400
-fontcharset fontcharset = ansi!
-fontpitch fontpitch = variable!
-fontfamily fontfamily = swiss!
-string facename = "Tahoma"
-string text = "Importar"
-end type
 
-event clicked;dw_2.Reset()
-dw_2.importFile(Text!, 'proceso_secuencia.txt')
-dw_2.sort()
-end event
-
-type cb_3 from commandbutton within tabpage_1
-integer x = 2007
-integer width = 402
-integer height = 112
-integer taborder = 20
-integer textsize = -10
-integer weight = 400
-fontcharset fontcharset = ansi!
-fontpitch fontpitch = variable!
-fontfamily fontfamily = swiss!
-string facename = "Tahoma"
-string text = "Guardar"
-end type
-
-event clicked;dw_2.saveas('proceso_secuencia.txt', Text!, false)
 end event
 
 type cb_2 from commandbutton within tabpage_1
@@ -336,19 +259,15 @@ string text = "Importar"
 end type
 
 event clicked;dw_1.Reset()
-dw_1.importFile(Text!, 'proceso_actividad.txt')
+dw_1.importFile(Text!, 'organigrama.txt')
 dw_1.sort()
 
 DataWindowChild dwc
-dw_2.GetChild('id_actividad_desde', dwc)
+dw_1.GetChild('id_superior', dwc)
 dwc.Reset()
-dwc.importFile(Text!, 'proceso_actividad.txt')
+dwc.importFile(Text!, 'organigrama.txt')
 dwc.sort()
 
-dw_2.GetChild('id_actividad_hasta', dwc)
-dwc.Reset()
-dwc.importFile(Text!, 'proceso_actividad.txt')
-dwc.sort()
 end event
 
 type cb_1 from commandbutton within tabpage_1
@@ -365,20 +284,8 @@ string facename = "Tahoma"
 string text = "Guardar"
 end type
 
-event clicked;dw_1.saveas('proceso_actividad.txt', Text!, false)
+event clicked;dw_1.saveas('organigrama.txt', Text!, false)
 end event
-
-type dw_2 from datawindow within tabpage_1
-integer x = 2007
-integer y = 128
-integer width = 3168
-integer height = 400
-integer taborder = 20
-string title = "none"
-string dataobject = "dw_proceso_secuencia"
-boolean livescroll = true
-borderstyle borderstyle = stylelowered!
-end type
 
 type dw_1 from datawindow within tabpage_1
 integer x = 59
@@ -387,7 +294,7 @@ integer width = 1929
 integer height = 1204
 integer taborder = 20
 string title = "none"
-string dataobject = "dw_proceso_actividad"
+string dataobject = "dw_organigrama"
 boolean livescroll = true
 borderstyle borderstyle = stylelowered!
 end type
