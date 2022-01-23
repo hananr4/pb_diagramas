@@ -40,7 +40,10 @@ dw_1 dw_1
 end type
 type tabpage_2 from userobject within tab_1
 end type
+type wb_1 from webbrowser within tabpage_2
+end type
 type tabpage_2 from userobject within tab_1
+wb_1 wb_1
 end type
 type tab_1 from tab within w_proceso
 tabpage_1 tabpage_1
@@ -76,6 +79,7 @@ end on
 event resize;this.tab_1.resize (newwidth, newheight)
 this.tab_1.tabpage_1.dw_1.resize (this.tab_1.tabpage_1.dw_1.width, newheight - 350)
 this.tab_1.tabpage_1.dw_2.resize (this.tab_1.tabpage_1.dw_2.width, newheight - 350)
+this.tab_1.tabpage_2.wb_1.resize (newwidth - 250, newheight - 250)
 end event
 
 type tab_1 from tab within w_proceso
@@ -107,6 +111,24 @@ on tab_1.destroy
 destroy(this.tabpage_1)
 destroy(this.tabpage_2)
 end on
+
+event selectionchanging;string ls_actividades, ls_secuencias 
+int rc
+
+if newindex = 2 then 
+	ls_actividades = tab_1.tabpage_1.dw_1.ExportJson()
+	ls_secuencias = tab_1.tabpage_1.dw_2.ExportJson()
+	
+	String ls_url 
+	ls_url += url + '?actividades='+ls_actividades + '&secuenciales=' + ls_secuencias
+	rc = tab_1.tabpage_2.wb_1.Navigate (ls_url)
+	
+	
+End If	
+	
+	
+
+end event
 
 type tabpage_1 from userobject within tab_1
 integer x = 18
@@ -198,7 +220,11 @@ string facename = "Tahoma"
 string text = "Nueva"
 end type
 
-event clicked;dw_1.InsertRow(1)
+event clicked;int row
+row = dw_1.RowCount()
+if row < 1 then row = 0
+dw_1.InsertRow(row + 1)
+
 
 end event
 
@@ -235,8 +261,28 @@ string facename = "Tahoma"
 string text = "Nueva"
 end type
 
-event clicked;dw_2.InsertRow(1)
+event clicked;
 
+
+DataWindowChild dwc
+dw_2.GetChild('id_actividad_desde', dwc)
+dwc.Reset()
+dw_1.RowsCopy(1, &
+      dw_1.RowCount(), Primary!, dwc, 1, Primary!)
+dwc.sort()
+
+dw_2.GetChild('id_actividad_hasta', dwc)
+dwc.Reset()
+
+dw_1.RowsCopy(1, &
+      dw_1.RowCount(), Primary!, dwc, 1, Primary!)
+		
+dwc.sort()
+
+int row
+row = dw_2.RowCount()
+if row < 1 then row = 0
+dw_2.InsertRow(row)
 end event
 
 type cb_4 from commandbutton within tabpage_1
@@ -356,5 +402,22 @@ string text = "Diagrama"
 long tabtextcolor = 33554432
 long tabbackcolor = 16777215
 long picturemaskcolor = 536870912
+wb_1 wb_1
+end type
+
+on tabpage_2.create
+this.wb_1=create wb_1
+this.Control[]={this.wb_1}
+end on
+
+on tabpage_2.destroy
+destroy(this.wb_1)
+end on
+
+type wb_1 from webbrowser within tabpage_2
+integer width = 3502
+integer height = 1600
+boolean border = false
+borderstyle borderstyle = StyleBox!
 end type
 

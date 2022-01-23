@@ -10,6 +10,9 @@ global error error
 global message message
 end forward
 
+global variables
+String url
+end variables
 global type pb-diagramas from application
 string appname = "pb-diagramas"
 string themepath = "C:\Program Files (x86)\Appeon\PowerBuilder 21.0\IDE\theme"
@@ -45,6 +48,7 @@ destroy(error)
 destroy(message)
 end on
 
-event open;open (w_frame )
+event open;url = 'http://192.168.100.2:3000/proceso'
+open (w_frame )
 end event
 
