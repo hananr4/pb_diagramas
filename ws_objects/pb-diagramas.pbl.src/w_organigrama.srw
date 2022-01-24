@@ -28,9 +28,12 @@ dw_1 dw_1
 end type
 type tabpage_2 from userobject within tab_1
 end type
+type cb_9 from commandbutton within tabpage_2
+end type
 type wb_1 from webbrowser within tabpage_2
 end type
 type tabpage_2 from userobject within tab_1
+cb_9 cb_9
 wb_1 wb_1
 end type
 type tab_1 from tab within w_organigrama
@@ -309,17 +312,43 @@ string text = "Diagrama"
 long tabtextcolor = 33554432
 long tabbackcolor = 16777215
 long picturemaskcolor = 536870912
+cb_9 cb_9
 wb_1 wb_1
 end type
 
 on tabpage_2.create
+this.cb_9=create cb_9
 this.wb_1=create wb_1
-this.Control[]={this.wb_1}
+this.Control[]={this.cb_9,&
+this.wb_1}
 end on
 
 on tabpage_2.destroy
+destroy(this.cb_9)
 destroy(this.wb_1)
 end on
+
+type cb_9 from commandbutton within tabpage_2
+integer y = 12
+integer width = 402
+integer height = 112
+integer taborder = 40
+integer textsize = -10
+integer weight = 400
+fontcharset fontcharset = ansi!
+fontpitch fontpitch = variable!
+fontfamily fontfamily = swiss!
+string facename = "Tahoma"
+string text = "Imprimir"
+end type
+
+event clicked;Integer li_rtn
+String ls_pdfpath
+Ls_pdfpath = getcurrentdirectory() + "\printaspdf.pdf"
+Li_rtn = wb_1.PrintAsPDF(ls_pdfpath)
+
+run('cmd /c ' + Ls_pdfpath, Minimized! ) 
+end event
 
 type wb_1 from webbrowser within tabpage_2
 integer width = 3502
