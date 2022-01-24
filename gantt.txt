@@ -1,0 +1,40 @@
+1		Banca Virtual - App Móvil	01/12/2021	06/09/2022	0		
+2	1	   Desarrollo 2	01/12/2021	22/03/2022	0		
+3	1	      Implementación de Arquitectura 	01/12/2021	21/12/2021	0		
+4	1	         Arquitectura	01/12/2021	07/12/2021	50.00	Arquitecto 	
+5	3	         Esqueleto de aplicación	15/12/2021	17/12/2021	30.00	Ingeniero desarrollo	6
+6	3	         Integración backend	08/12/2021	14/12/2021	10.00	Arquitecto 	4
+7	3	         Diseño gráfico y Compentes 	08/12/2021	21/12/2021	0	Diseñador UI	4
+8	3	         Modelos y servicios	20/12/2021	21/12/2021	0	DBA	5
+9	2	      Seguridades	22/12/2021	04/01/2022	0		3
+10	9	         Login	22/12/2021	24/12/2021	0	Ingeniero desarrollo	
+11	9	         Registro	27/12/2021	29/12/2021	0	Ingeniero desarrollo	10
+12	9	         Recuperacion de contraseña	30/12/2021	31/12/2021	0	Ingeniero desarrollo	11
+13	9	         Recuperacion de usuario	03/01/2022	04/01/2022	0	Ingeniero desarrollo	12
+14	2	      Consultas	05/01/2022	14/01/2022	0		9
+15	14	         Posicion Consolidada - Consultas saldos	05/01/2022	06/01/2022	0	Ingeniero desarrollo	
+16	14	         Consulta Movimientos	07/01/2022	10/01/2022	0	Ingeniero desarrollo	15
+17	14	         Consulta de créditos	11/01/2022	12/01/2022	0	Ingeniero desarrollo	16
+18	14	         Consulta de inversiones	13/01/2022	14/01/2022	0	Ingeniero desarrollo	17
+19	2	      Transferencias	17/01/2022	27/01/2022	0		14
+20	19	         Transferencia cuentas propias	17/01/2022	19/01/2022	0	Ingeniero desarrollo	
+21	19	         Transferencia cuentas terceros	20/01/2022	24/01/2022	0	Ingeniero desarrollo	20
+22	19	         Transferenicas interbancarias	25/01/2022	27/01/2022	0	Ingeniero desarrollo	21
+23	2	      Recargas y pago de servicios	28/01/2022	09/02/2022	0		19
+24	23	         Recargas	28/01/2022	01/02/2022	0	Ingeniero desarrollo	
+25	23	         Beneficiarios	02/02/2022	04/02/2022	0	Ingeniero desarrollo	24
+26	23	         Pago de servicios	07/02/2022	09/02/2022	0	Ingeniero desarrollo	25
+27	2	      Billetera	10/02/2022	17/02/2022	0		23
+28	27	         Cash in	10/02/2022	14/02/2022	0	Ingeniero desarrollo	
+29	27	         Cash out	15/02/2022	17/02/2022	0	Ingeniero desarrollo	28
+30	2	      Push Notificaciones 	18/02/2022	03/03/2022	0		27
+31	30	         Configuración	18/02/2022	24/02/2022	0	Ingeniero desarrollo	
+32	30	         Presentación	25/02/2022	03/03/2022	0	Ingeniero desarrollo	31
+33	2	      Parametrizacion	04/03/2022	15/03/2022	0		30
+34	33	         Personalizar Montos 	04/03/2022	09/03/2022	0	Ingeniero desarrollo	
+35	33	         Personalizar Cuentas 	10/03/2022	15/03/2022	0	Ingeniero desarrollo	34
+36	1	      Pruebas de aceptación continuas	01/12/2021	22/03/2022	0		
+37	1	   Entrega 0	22/03/2022	22/03/2022	0	Gerente de proyecto	2
+38	2	   Configuración de Despliegue continuo	22/12/2021	04/01/2022	0	Infraestructura	3
+39	2	   Garantia y Soporte post Entrega	23/03/2022	06/09/2022	0	Soporte	37
+40	2	   Transferencia de conocimientos	23/03/2022	29/03/2022	0	Soporte	37

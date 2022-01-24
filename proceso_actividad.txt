@@ -6,3 +6,4 @@
 6	VERIFICACION	Proceso
 7	NOTIFICACIÓN	Documento
 8	FIN	Fin
+9	FIN ANULADO	Fin
