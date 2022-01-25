@@ -6,6 +6,8 @@ type tab_1 from tab within w_proceso
 end type
 type tabpage_1 from userobject within tab_1
 end type
+type cb_10 from commandbutton within tabpage_1
+end type
 type cb_8 from commandbutton within tabpage_1
 end type
 type cb_7 from commandbutton within tabpage_1
@@ -27,6 +29,7 @@ end type
 type dw_1 from datawindow within tabpage_1
 end type
 type tabpage_1 from userobject within tab_1
+cb_10 cb_10
 cb_8 cb_8
 cb_7 cb_7
 cb_6 cb_6
@@ -83,27 +86,6 @@ event resize;this.tab_1.resize (newwidth, newheight)
 this.tab_1.tabpage_1.dw_1.resize (this.tab_1.tabpage_1.dw_1.width, newheight - 350)
 this.tab_1.tabpage_1.dw_2.resize (newwidth - this.tab_1.tabpage_1.dw_1.width - 100, newheight - 350)
 this.tab_1.tabpage_2.wb_1.resize (newwidth - 250, newheight - 250)
-end event
-
-event open;
-tab_1.tabpage_1.dw_1.Reset()
-tab_1.tabpage_1.dw_1.importFile(Text!, 'proceso_actividad.txt')
-tab_1.tabpage_1.dw_1.sort()
-
-tab_1.tabpage_1.dw_2.Reset()
-tab_1.tabpage_1.dw_2.importFile(Text!, 'proceso_secuencia.txt')
-tab_1.tabpage_1.dw_2.sort()
-
-DataWindowChild dwc
-tab_1.tabpage_1.dw_2.GetChild('id_actividad_desde', dwc)
-dwc.Reset()
-dwc.importFile(Text!, 'proceso_actividad.txt')
-dwc.sort()
-
-tab_1.tabpage_1.dw_2.GetChild('id_actividad_hasta', dwc)
-dwc.Reset()
-dwc.importFile(Text!, 'proceso_actividad.txt')
-dwc.sort()
 end event
 
 type tab_1 from tab within w_proceso
@@ -163,6 +145,7 @@ long backcolor = 16777215
 string text = "Proceso"
 long tabtextcolor = 33554432
 long picturemaskcolor = 536870912
+cb_10 cb_10
 cb_8 cb_8
 cb_7 cb_7
 cb_6 cb_6
@@ -176,6 +159,7 @@ dw_1 dw_1
 end type
 
 on tabpage_1.create
+this.cb_10=create cb_10
 this.cb_8=create cb_8
 this.cb_7=create cb_7
 this.cb_6=create cb_6
@@ -186,7 +170,8 @@ this.cb_2=create cb_2
 this.cb_1=create cb_1
 this.dw_2=create dw_2
 this.dw_1=create dw_1
-this.Control[]={this.cb_8,&
+this.Control[]={this.cb_10,&
+this.cb_8,&
 this.cb_7,&
 this.cb_6,&
 this.cb_5,&
@@ -199,6 +184,7 @@ this.dw_1}
 end on
 
 on tabpage_1.destroy
+destroy(this.cb_10)
 destroy(this.cb_8)
 destroy(this.cb_7)
 destroy(this.cb_6)
@@ -210,6 +196,24 @@ destroy(this.cb_1)
 destroy(this.dw_2)
 destroy(this.dw_1)
 end on
+
+type cb_10 from commandbutton within tabpage_1
+integer x = 3749
+integer width = 402
+integer height = 112
+integer taborder = 40
+integer textsize = -10
+integer weight = 400
+fontcharset fontcharset = ansi!
+fontpitch fontpitch = variable!
+fontfamily fontfamily = swiss!
+string facename = "Tahoma"
+string text = "Limpiar"
+end type
+
+event clicked;dw_1.reset()
+dw_2.reset()
+end event
 
 type cb_8 from commandbutton within tabpage_1
 integer x = 1307
@@ -465,6 +469,8 @@ run('cmd /c ' + Ls_pdfpath, Minimized! )
 end event
 
 type wb_1 from webbrowser within tabpage_2
+integer x = 23
+integer y = 148
 integer width = 3502
 integer height = 1600
 boolean border = false

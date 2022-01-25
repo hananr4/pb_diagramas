@@ -73,19 +73,6 @@ this.tab_1.tabpage_1.dw_1.resize (newwidth -350, newheight - 350)
 this.tab_1.tabpage_2.wb_1.resize (newwidth - 250, newheight - 250)
 end event
 
-event open;
-tab_1.tabpage_1.dw_1.Reset()
-tab_1.tabpage_1.dw_1.importFile(Text!, 'organigrama.txt')
-tab_1.tabpage_1.dw_1.sort()
-
-DataWindowChild dwc
-tab_1.tabpage_1.dw_1.GetChild('id_superior', dwc)
-dwc.Reset()
-dwc.importFile(Text!, 'organigrama.txt')
-dwc.sort()
-
-end event
-
 type tab_1 from tab within w_organigrama
 integer width = 5211
 integer height = 1808

@@ -49,7 +49,7 @@ destroy(error)
 destroy(message)
 end on
 
-event open;url = 'http://192.168.100.2:3000/'
+event open;url = 'http://localhost:3000/'
 open (w_frame )
 end event
 
