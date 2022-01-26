@@ -1,0 +1,8 @@
+﻿$PBExportHeader$s_wf_flecha.srs
+global type s_wf_flecha from structure
+	line		linea
+	line		punta1
+	line		punta2
+	statictext		etiqueta
+end type
+

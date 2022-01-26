@@ -6,11 +6,14 @@ type m_proceso from menu within m_menu
 end type
 type m_organigrama from menu within m_menu
 end type
+type m_procesodw from menu within m_menu
+end type
 type m_salir from menu within m_menu
 end type
 global type m_menu from menu
 m_proceso m_proceso
 m_organigrama m_organigrama
+m_procesodw m_procesodw
 m_salir m_salir
 end type
 end forward
@@ -18,6 +21,7 @@ end forward
 global type m_menu from menu
 m_proceso m_proceso
 m_organigrama m_organigrama
+m_procesodw m_procesodw
 m_salir m_salir
 end type
 global m_menu m_menu
@@ -43,9 +47,11 @@ this.toolbargradient = true
 this.bitmapgradient = true
 this.m_proceso=create m_proceso
 this.m_organigrama=create m_organigrama
+this.m_procesodw=create m_procesodw
 this.m_salir=create m_salir
 this.Item[UpperBound(this.Item)+1]=this.m_proceso
 this.Item[UpperBound(this.Item)+1]=this.m_organigrama
+this.Item[UpperBound(this.Item)+1]=this.m_procesodw
 this.Item[UpperBound(this.Item)+1]=this.m_salir
 end on
 
@@ -53,6 +59,7 @@ on m_menu.destroy
 call super::destroy
 destroy(this.m_proceso)
 destroy(this.m_organigrama)
+destroy(this.m_procesodw)
 destroy(this.m_salir)
 end on
 
@@ -119,6 +126,39 @@ this.bitmapgradient = true
 end on
 
 on m_organigrama.destroy
+call super::destroy
+end on
+
+type m_procesodw from menu within m_menu
+end type
+
+event clicked;Window child
+
+OpenSheet  ( child, "w_dw_proceso",  w_frame, 1, Original! )
+child.WindowState =  Maximized!
+end event
+
+on m_procesodw.create
+call super::create
+this.text = "Proceso DW"
+this.menutextcolor = 134217735
+this.menubackcolor = 134217732
+this.menuhighlightcolor = 134217741
+this.textsize = 8
+this.weight = 400
+this.facename = "Tahoma"
+this.titlebackcolor = 134217730
+this.bitmapbackcolor = 12632256
+this.menubitmaps = true
+this.titlegradient = true
+this.toolbartextcolor = 134217746
+this.toolbarbackcolor = 67108864
+this.toolbarhighlightcolor = 134217741
+this.toolbargradient = true
+this.bitmapgradient = true
+end on
+
+on m_procesodw.destroy
 call super::destroy
 end on
 
