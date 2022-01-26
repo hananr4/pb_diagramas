@@ -2,6 +2,8 @@
 forward
 global type uo_dw_diagrama from userobject
 end type
+type cb_2 from commandbutton within uo_dw_diagrama
+end type
 type cb_1 from commandbutton within uo_dw_diagrama
 end type
 type dw_sec from datawindow within uo_dw_diagrama
@@ -28,6 +30,7 @@ long backcolor = 67108864
 string text = "none"
 long tabtextcolor = 33554432
 long picturemaskcolor = 536870912
+cb_2 cb_2
 cb_1 cb_1
 dw_sec dw_sec
 dw_act dw_act
@@ -79,9 +82,9 @@ For li_fila = 1 to dw_act.RowCount( )
 	ls_accion = dw_act.Object.descripcion[li_fila]
 	
 	ll_x = dw_act.Object.grafico_x[li_fila]
-	if Isnull( ll_x  ) Then ll_x = 0 
+	if Isnull( ll_x  ) or ll_x < 0  Then ll_x = 0 
 	ll_y = dw_act.Object.grafico_y[li_fila]
-	if Isnull( ll_y ) Then ll_y = 0 
+	if Isnull( ll_y ) or ll_y < 0  Then ll_y = 0 
 
 
 	String mod_string, ls_filename, ls_nombre
@@ -199,16 +202,16 @@ for li_fila_sec = 1 to dw_sec.Rowcount( )
 	ll_fila_actividad_2 = dw_sec.Object.c_fila_out[li_fila_sec]
 	dw_sec.Object.c_Id[li_fila_sec]  = li_fila_sec
 	ls_etiqueta = ''
-	if dw_act.Object.tipo[ll_fila_actividad_1] = 'CN' Then 
-		ls_etiqueta = 'SI'
-	End If 
+//	if dw_act.Object.tipo[ll_fila_actividad_1] = 'CN' Then 
+//		ls_etiqueta = 'SI'
+//	End If 
 	uof_line_create(li_flecha, ll_fila_actividad_1, ll_fila_actividad_2, ls_etiqueta  )
-	if dw_act.Object.tipo[ll_fila_actividad_1] = 'CN' Then 
-		ls_etiqueta = 'NO'
-		li_flecha = dw_sec.Object.c_flecha_false[li_fila_sec] 
-		ll_fila_actividad_2 = dw_sec.Object.c_fila_false[li_fila_sec]		
-		uof_line_create(li_flecha, ll_fila_actividad_1, ll_fila_actividad_2,ls_etiqueta  )
-	End If 
+//	if dw_act.Object.tipo[ll_fila_actividad_1] = 'CN' Then 
+//		ls_etiqueta = 'NO'
+//		li_flecha = dw_sec.Object.c_flecha_false[li_fila_sec] 
+//		ll_fila_actividad_2 = dw_sec.Object.c_fila_false[li_fila_sec]		
+//		uof_line_create(li_flecha, ll_fila_actividad_1, ll_fila_actividad_2,ls_etiqueta  )
+//	End If 
 Next 
 
 dw_1.SetRedraw( true  )
@@ -291,10 +294,14 @@ ll_Height = uof_get_property_long( is_g[fila_actividad_2], 'Height')
 
 Long X1, X2,Y1, Y2
 
-X1 = uof_get_property_long( is_g[fila_actividad_1], 'x') + ( uof_get_property_long( is_g[fila_actividad_1], 'Width') / 2  )
-Y1 = uof_get_property_long( is_g[fila_actividad_1], 'y') + ( uof_get_property_long( is_g[fila_actividad_1], 'Height') / 2  )
-X2 = uof_get_property_long( is_g[fila_actividad_2], 'x') + ( uof_get_property_long( is_g[fila_actividad_2], 'Width') / 2  )
-Y2 = uof_get_property_long( is_g[fila_actividad_2], 'Y') + ( uof_get_property_long( is_g[fila_actividad_2], 'Height') / 2  )
+if (fila_actividad_1> 0) then 
+	X1 = uof_get_property_long( is_g[fila_actividad_1], 'x') + ( uof_get_property_long( is_g[fila_actividad_1], 'Width') / 2  )
+	Y1 = uof_get_property_long( is_g[fila_actividad_1], 'y') + ( uof_get_property_long( is_g[fila_actividad_1], 'Height') / 2  )
+End if
+if (fila_actividad_2> 0) then 
+	X2 = uof_get_property_long( is_g[fila_actividad_2], 'x') + ( uof_get_property_long( is_g[fila_actividad_2], 'Width') / 2  )
+	Y2 = uof_get_property_long( is_g[fila_actividad_2], 'Y') + ( uof_get_property_long( is_g[fila_actividad_2], 'Height') / 2  )
+End if
 
 If X1 > X2 Then
 	If Y1> Y2 Then 
@@ -505,6 +512,16 @@ dw_sec.Reset()
 adw_act.RowsCopy(adw_act.GetRow(), adw_act.RowCount(), Primary!, dw_act, 1, Primary!)
 adw_sec.RowsCopy(adw_sec.GetRow(), adw_sec.RowCount(), Primary!, dw_sec, 1, Primary!)
 
+int i
+for i = 1 to adw_sec.RowCount()
+	adw_sec.Object.c_fila_in[1] = 0
+	adw_sec.Object.c_fila_out[1] = 0
+	adw_sec.Object.c_fila_false[1] = 0
+	adw_sec.Object.c_id[1] = 0
+	adw_sec.Object.c_flecha[1] = 0
+	adw_sec.Object.c_flecha_false[1] = 0
+Next 
+
 uof_destroy( )
 
 uof_create()
@@ -531,17 +548,9 @@ for li_fila_sec = 1 to dw_sec.Rowcount( )
 	li_flecha = dw_sec.Object.c_flecha[li_fila_sec]
 
 	ls_etiqueta = ''
-	if dw_act.Object.tipo[ll_fila_actividad_1] = 'CN' Then  ls_etiqueta = 'SI'
-
 
 	uof_line_create(li_flecha, ll_fila_actividad_1, ll_fila_actividad_2, ls_etiqueta )
 	
-	If dw_act.Object.tipo[ll_fila_actividad_1] = 'CN' Then 
-		ls_etiqueta = 'NO'
-		ll_fila_actividad_2 = dw_sec.Object.c_fila_false[li_fila_sec]
-		li_flecha = dw_sec.Object.c_flecha_false[li_fila_sec]
-		uof_line_create(li_flecha, ll_fila_actividad_1, ll_fila_actividad_2,ls_etiqueta  )
-	End If 
 
 Next 
 end subroutine
@@ -558,22 +567,61 @@ dw_1.InsertRow(0)
 end subroutine
 
 on uo_dw_diagrama.create
+this.cb_2=create cb_2
 this.cb_1=create cb_1
 this.dw_sec=create dw_sec
 this.dw_act=create dw_act
 this.dw_1=create dw_1
-this.Control[]={this.cb_1,&
+this.Control[]={this.cb_2,&
+this.cb_1,&
 this.dw_sec,&
 this.dw_act,&
 this.dw_1}
 end on
 
 on uo_dw_diagrama.destroy
+destroy(this.cb_2)
 destroy(this.cb_1)
 destroy(this.dw_sec)
 destroy(this.dw_act)
 destroy(this.dw_1)
 end on
+
+type cb_2 from commandbutton within uo_dw_diagrama
+integer x = 443
+integer width = 402
+integer height = 112
+integer taborder = 10
+integer textsize = -10
+integer weight = 400
+fontcharset fontcharset = ansi!
+fontpitch fontpitch = variable!
+fontfamily fontfamily = swiss!
+string facename = "Tahoma"
+string text = "Vista previa"
+end type
+
+event clicked;String ls_preview, ls_err 
+
+setpointer(hourglass!)
+
+ls_preview = dw_1.Object.DataWindow.Print.Preview
+
+if Upper (ls_preview) = 'YES' Then
+       ls_err = dw_1.Modify( "DataWindow.Print.Preview = 'No'")
+       if ls_err <> "" Then 
+	       MessageBox ( 'ERROR', "ERROR: Solo soporta vista preliminar" ) 
+       End if 
+Else
+       ls_err = dw_1.Modify( "DataWindow.Print.Preview = 'Yes'")
+       if ls_err <> "" Then 
+              MessageBox ( 'ERROR', "ERROR: No soporta vista preliminar" ) 
+       End if 
+End If
+
+
+
+end event
 
 type cb_1 from commandbutton within uo_dw_diagrama
 integer width = 402
