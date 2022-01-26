@@ -147,13 +147,6 @@ For li_fila = 1 to dw_act.RowCount( )
 		dw_sec.Object.c_fila_out[li_fila_sec] = li_fila
 	Next 
 
-//	dw_sec.SetFilter ( 'id_actividad_false='+String( ll_id_actividad ) )
-//	li_fila_sec = dw_sec.Filter()
-//	
-//	For li_fila_sec = 1 to dw_sec.RowCount()
-//		dw_sec.Object.c_fila_false[li_fila_sec] = li_fila
-//	Next 
-//
 Next 
 
 
@@ -169,29 +162,14 @@ for li_fila_sec = 1 to dw_sec.Rowcount( )
 	uof_create_arrow( li_flecha )
 	ll_fila_actividad_1 = dw_sec.Object.c_fila_in[li_fila_sec]
 	dw_sec.Object.c_flecha[li_fila_sec] = li_flecha
-//	if dw_act.Object.tipo[ll_fila_actividad_1] = 'CN' Then 
-//		li_flecha ++ 
-//		uof_create_arrow( li_flecha )
-//		dw_sec.Object.c_flecha_false[li_fila_sec] = li_flecha
-//	End If 
 Next 
-//---------------------------
 For li_fila = 1 to dw_act.RowCount( )
 	mod_string = ls_actividades[ li_fila ] 
 	err = dw_1.Modify(mod_string)
-//	IF err <> "" THEN
-//			  MessageBox("Error", "Al crear grafico de actividad 1, " + err, StopSign!)
-// 			  RETURN
-//	END IF
 
 	mod_string = ls_nombre_acciones[ li_fila ] 
 	err = dw_1.Modify(mod_string)
-//	IF err <> "" THEN
-//			  MessageBox("Error", "Al crear grafico de actividad 2, " + err, StopSign!)
-//			  RETURN
-//	END IF
 Next
-//---------------------------
 
 dw_sec.SetFilter ( '' )
 dw_sec.Filter()
@@ -202,16 +180,7 @@ for li_fila_sec = 1 to dw_sec.Rowcount( )
 	ll_fila_actividad_2 = dw_sec.Object.c_fila_out[li_fila_sec]
 	dw_sec.Object.c_Id[li_fila_sec]  = li_fila_sec
 	ls_etiqueta = ''
-//	if dw_act.Object.tipo[ll_fila_actividad_1] = 'CN' Then 
-//		ls_etiqueta = 'SI'
-//	End If 
 	uof_line_create(li_flecha, ll_fila_actividad_1, ll_fila_actividad_2, ls_etiqueta  )
-//	if dw_act.Object.tipo[ll_fila_actividad_1] = 'CN' Then 
-//		ls_etiqueta = 'NO'
-//		li_flecha = dw_sec.Object.c_flecha_false[li_fila_sec] 
-//		ll_fila_actividad_2 = dw_sec.Object.c_fila_false[li_fila_sec]		
-//		uof_line_create(li_flecha, ll_fila_actividad_1, ll_fila_actividad_2,ls_etiqueta  )
-//	End If 
 Next 
 
 dw_1.SetRedraw( true  )
@@ -701,7 +670,6 @@ If Mid ( as_nombre, 1, 8) = 'p_activ_' or Mid ( as_nombre, 1, 9) = 't_accion_' t
 		uof_set_property_long( 'p_activ_' + ls_id , 'y',  String ( il_y_move - 80) )
 	End If 
 	li_id = Long ( ls_id )
-//	If li_id > 0 Then  uof_posicion( li_id, xpos, ypos )
 	If li_id > 0 Then  uof_posicion( li_id, il_x_move, il_y_move )
 end if
 
