@@ -49,23 +49,25 @@ BOOLEAN ib_justo_cambio = false
 end variables
 
 forward prototypes
-public subroutine wf_construir_diagrama ()
-public subroutine wf_crear_fecha (integer id)
-public subroutine wf_conector_dibujar (long fila_conector, long fila_actividad_1, long fila_actividad_2, string as_etiqueta)
-public function long wf_obtener_propiedad_long (string as_nombre, string as_tipo)
-public function integer wf_conf_propiedad_long (string as_nombre, string as_tipo, string as_valor)
+public subroutine uof_create ()
+public subroutine uof_create_arrow (integer id)
+public subroutine uof_line_create (long fila_conector, long fila_actividad_1, long fila_actividad_2, string as_etiqueta)
+public function long uof_get_property_long (string as_nombre, string as_tipo)
+public function integer uof_set_property_long (string as_nombre, string as_tipo, string as_valor)
 public function integer resize (integer w, integer h)
 public subroutine config (datawindow adw_act, datawindow adw_sec)
-public subroutine wf_posicion (long fila, long xpos, long ypos)
-public subroutine wf_destruir_diagrama ()
+public subroutine uof_posicion (long fila, long xpos, long ypos)
+public subroutine uof_destroy ()
 end prototypes
 
-public subroutine wf_construir_diagrama ();Long li_fila, ll_x, ll_y, ll_id_actividad, ll_ln, li_fila_sec 
+public subroutine uof_create ();
+
+Long li_fila, ll_x, ll_y, ll_id_actividad, ll_ln, li_fila_sec 
 String ls_etiqueta, ls_actividades[], ls_nombre_acciones[]
 String err, ls_accion, ls_nombre_accion 
 
 
-wf_destruir_diagrama( )
+uof_destroy( )
 dw_1.SetRedraw( false )
 
 
@@ -161,12 +163,12 @@ dw_sec.Filter()
 Int li_flecha = 0
 for li_fila_sec = 1 to dw_sec.Rowcount( )
 	li_flecha ++ 
-	wf_crear_fecha( li_flecha )
+	uof_create_arrow( li_flecha )
 	ll_fila_actividad_1 = dw_sec.Object.c_fila_in[li_fila_sec]
 	dw_sec.Object.c_flecha[li_fila_sec] = li_flecha
 //	if dw_act.Object.tipo[ll_fila_actividad_1] = 'CN' Then 
 //		li_flecha ++ 
-//		wf_crear_fecha( li_flecha )
+//		uof_create_arrow( li_flecha )
 //		dw_sec.Object.c_flecha_false[li_fila_sec] = li_flecha
 //	End If 
 Next 
@@ -200,19 +202,19 @@ for li_fila_sec = 1 to dw_sec.Rowcount( )
 	if dw_act.Object.tipo[ll_fila_actividad_1] = 'CN' Then 
 		ls_etiqueta = 'SI'
 	End If 
-	wf_conector_dibujar(li_flecha, ll_fila_actividad_1, ll_fila_actividad_2, ls_etiqueta  )
+	uof_line_create(li_flecha, ll_fila_actividad_1, ll_fila_actividad_2, ls_etiqueta  )
 	if dw_act.Object.tipo[ll_fila_actividad_1] = 'CN' Then 
 		ls_etiqueta = 'NO'
 		li_flecha = dw_sec.Object.c_flecha_false[li_fila_sec] 
 		ll_fila_actividad_2 = dw_sec.Object.c_fila_false[li_fila_sec]		
-		wf_conector_dibujar(li_flecha, ll_fila_actividad_1, ll_fila_actividad_2,ls_etiqueta  )
+		uof_line_create(li_flecha, ll_fila_actividad_1, ll_fila_actividad_2,ls_etiqueta  )
 	End If 
 Next 
 
 dw_1.SetRedraw( true  )
 end subroutine
 
-public subroutine wf_crear_fecha (integer id);	String err, mod_string, ls_nombre
+public subroutine uof_create_arrow (integer id);	String err, mod_string, ls_nombre
 
 	ls_nombre = 'l_fecha_' + String (id ) 
 	mod_string = 'CREATE line(band=detail x1="0" y1="0" x2="100" y2="100"  '
@@ -278,21 +280,21 @@ public subroutine wf_crear_fecha (integer id);	String err, mod_string, ls_nombre
 
 end subroutine
 
-public subroutine wf_conector_dibujar (long fila_conector, long fila_actividad_1, long fila_actividad_2, string as_etiqueta);int cuadrante_direccion
+public subroutine uof_line_create (long fila_conector, long fila_actividad_1, long fila_actividad_2, string as_etiqueta);int cuadrante_direccion
 Long  ll_Width, ll_Height
 
 if IsNull ( fila_actividad_2 ) or fila_actividad_2 < 1 Then return 
 
 
-ll_Width = wf_obtener_propiedad_long( is_g[fila_actividad_2], 'Width') 
-ll_Height = wf_obtener_propiedad_long( is_g[fila_actividad_2], 'Height')  
+ll_Width = uof_get_property_long( is_g[fila_actividad_2], 'Width') 
+ll_Height = uof_get_property_long( is_g[fila_actividad_2], 'Height')  
 
 Long X1, X2,Y1, Y2
 
-X1 = wf_obtener_propiedad_long( is_g[fila_actividad_1], 'x') + ( wf_obtener_propiedad_long( is_g[fila_actividad_1], 'Width') / 2  )
-Y1 = wf_obtener_propiedad_long( is_g[fila_actividad_1], 'y') + ( wf_obtener_propiedad_long( is_g[fila_actividad_1], 'Height') / 2  )
-X2 = wf_obtener_propiedad_long( is_g[fila_actividad_2], 'x') + ( wf_obtener_propiedad_long( is_g[fila_actividad_2], 'Width') / 2  )
-Y2 = wf_obtener_propiedad_long( is_g[fila_actividad_2], 'Y') + ( wf_obtener_propiedad_long( is_g[fila_actividad_2], 'Height') / 2  )
+X1 = uof_get_property_long( is_g[fila_actividad_1], 'x') + ( uof_get_property_long( is_g[fila_actividad_1], 'Width') / 2  )
+Y1 = uof_get_property_long( is_g[fila_actividad_1], 'y') + ( uof_get_property_long( is_g[fila_actividad_1], 'Height') / 2  )
+X2 = uof_get_property_long( is_g[fila_actividad_2], 'x') + ( uof_get_property_long( is_g[fila_actividad_2], 'Width') / 2  )
+Y2 = uof_get_property_long( is_g[fila_actividad_2], 'Y') + ( uof_get_property_long( is_g[fila_actividad_2], 'Height') / 2  )
 
 If X1 > X2 Then
 	If Y1> Y2 Then 
@@ -392,10 +394,10 @@ Long Ty, Tx
 
 string ls_linea 
 ls_linea  = istr_flechas[fila_conector].l_fecha
-wf_conf_propiedad_long( ls_linea, 'X1', String ( X1 ) )
-wf_conf_propiedad_long( ls_linea, 'Y1', String ( Y1 ) )
-wf_conf_propiedad_long( ls_linea, 'X2', String ( X2 ) )
-wf_conf_propiedad_long( ls_linea, 'Y2', String ( Y2 ) )
+uof_set_property_long( ls_linea, 'X1', String ( X1 ) )
+uof_set_property_long( ls_linea, 'Y1', String ( Y1 ) )
+uof_set_property_long( ls_linea, 'X2', String ( X2 ) )
+uof_set_property_long( ls_linea, 'Y2', String ( Y2 ) )
 
 Double alpha, epsilon1, epsilon2, angulo_punta, largo_punta
 Long PX1, PY1,PX2, PY2
@@ -445,35 +447,35 @@ choose case cuadrante_direccion
 end choose
 
 ls_linea = istr_flechas[fila_conector].l_punta1
-wf_conf_propiedad_long( ls_linea, 'X1', string ( SX1 ) )
-wf_conf_propiedad_long( ls_linea, 'Y1', string ( SY1 ) )
-wf_conf_propiedad_long( ls_linea, 'X2', string ( X2 ) )
-wf_conf_propiedad_long( ls_linea, 'Y2', string ( Y2 ) )
+uof_set_property_long( ls_linea, 'X1', string ( SX1 ) )
+uof_set_property_long( ls_linea, 'Y1', string ( SY1 ) )
+uof_set_property_long( ls_linea, 'X2', string ( X2 ) )
+uof_set_property_long( ls_linea, 'Y2', string ( Y2 ) )
 
 ls_linea = istr_flechas[fila_conector].l_punta2
-wf_conf_propiedad_long( ls_linea, 'X1', string ( SX2 ) )
-wf_conf_propiedad_long( ls_linea, 'Y1', string ( SY2 ) )
-wf_conf_propiedad_long( ls_linea, 'X2', string ( X2 ) )
-wf_conf_propiedad_long( ls_linea, 'Y2', string ( Y2 ) )
+uof_set_property_long( ls_linea, 'X1', string ( SX2 ) )
+uof_set_property_long( ls_linea, 'Y1', string ( SY2 ) )
+uof_set_property_long( ls_linea, 'X2', string ( X2 ) )
+uof_set_property_long( ls_linea, 'Y2', string ( Y2 ) )
 
 
 String ls_etiqueta
 ls_etiqueta = istr_flechas[fila_conector].etiqueta 
 
 If Isnull ( as_etiqueta  ) or as_etiqueta = '' Then 
-	wf_conf_propiedad_long( ls_etiqueta, 'visible', "0" )
+	uof_set_property_long( ls_etiqueta, 'visible', "0" )
 Else 
 	ll_width =  40 * Len (as_etiqueta)
-	wf_conf_propiedad_long( ls_etiqueta, 'Width', String ( ll_width ) )
-	wf_conf_propiedad_long( ls_etiqueta, 'X', String ( Long ( X1 + (X2 - X1)/2 - ( ll_width / 2 ) ) ) )
-	wf_conf_propiedad_long( ls_etiqueta, 'Y', String ( Long ( Y1 + (Y2 - Y1)/2 ) ) )
-	wf_conf_propiedad_long( ls_etiqueta, 'Text', as_etiqueta ) 
-	wf_conf_propiedad_long( ls_etiqueta, 'visible', "1" ) 
+	uof_set_property_long( ls_etiqueta, 'Width', String ( ll_width ) )
+	uof_set_property_long( ls_etiqueta, 'X', String ( Long ( X1 + (X2 - X1)/2 - ( ll_width / 2 ) ) ) )
+	uof_set_property_long( ls_etiqueta, 'Y', String ( Long ( Y1 + (Y2 - Y1)/2 ) ) )
+	uof_set_property_long( ls_etiqueta, 'Text', as_etiqueta ) 
+	uof_set_property_long( ls_etiqueta, 'visible', "1" ) 
 End If 	
 
 end subroutine
 
-public function long wf_obtener_propiedad_long (string as_nombre, string as_tipo);String ls_temp, ls_valor
+public function long uof_get_property_long (string as_nombre, string as_tipo);String ls_temp, ls_valor
 ls_temp = as_nombre + '.' + as_tipo
 
 ls_valor = dw_1.Describe(ls_temp)
@@ -481,7 +483,7 @@ ls_valor = dw_1.Describe(ls_temp)
 return Long (ls_valor)
 end function
 
-public function integer wf_conf_propiedad_long (string as_nombre, string as_tipo, string as_valor);String ls_temp, ls_ret
+public function integer uof_set_property_long (string as_nombre, string as_tipo, string as_valor);String ls_temp, ls_ret
 ls_temp = as_nombre + '.' + as_tipo + '="' + as_valor + '"'
 
 ls_ret = dw_1.Modify(ls_temp)
@@ -503,12 +505,12 @@ dw_sec.Reset()
 adw_act.RowsCopy(adw_act.GetRow(), adw_act.RowCount(), Primary!, dw_act, 1, Primary!)
 adw_sec.RowsCopy(adw_sec.GetRow(), adw_sec.RowCount(), Primary!, dw_sec, 1, Primary!)
 
-wf_destruir_diagrama( )
+uof_destroy( )
 
-wf_construir_diagrama()
+uof_create()
 end subroutine
 
-public subroutine wf_posicion (long fila, long xpos, long ypos);String ls_etiqueta 
+public subroutine uof_posicion (long fila, long xpos, long ypos);String ls_etiqueta 
 IF xpos < 0 Then xpos = 0 
 IF ypos < 0 Then ypos = 0 
 
@@ -532,19 +534,19 @@ for li_fila_sec = 1 to dw_sec.Rowcount( )
 	if dw_act.Object.tipo[ll_fila_actividad_1] = 'CN' Then  ls_etiqueta = 'SI'
 
 
-	wf_conector_dibujar(li_flecha, ll_fila_actividad_1, ll_fila_actividad_2, ls_etiqueta )
+	uof_line_create(li_flecha, ll_fila_actividad_1, ll_fila_actividad_2, ls_etiqueta )
 	
 	If dw_act.Object.tipo[ll_fila_actividad_1] = 'CN' Then 
 		ls_etiqueta = 'NO'
 		ll_fila_actividad_2 = dw_sec.Object.c_fila_false[li_fila_sec]
 		li_flecha = dw_sec.Object.c_flecha_false[li_fila_sec]
-		wf_conector_dibujar(li_flecha, ll_fila_actividad_1, ll_fila_actividad_2,ls_etiqueta  )
+		uof_line_create(li_flecha, ll_fila_actividad_1, ll_fila_actividad_2,ls_etiqueta  )
 	End If 
 
 Next 
 end subroutine
 
-public subroutine wf_destruir_diagrama ();String ls_dataobject
+public subroutine uof_destroy ();String ls_dataobject
 
 dw_1.SetRedraw( true )
 
@@ -639,20 +641,20 @@ String ls_id
 If Mid ( as_nombre, 1, 8) = 'p_activ_' or Mid ( as_nombre, 1, 9) = 't_accion_' then
 	If Mid ( as_nombre, 1, 8) = 'p_activ_' then
 		ls_id = mid ( as_nombre, 9, 50)
-		il_x_move = wf_obtener_propiedad_long( 'p_activ_' + ls_id , 'x' )
-		il_y_move = wf_obtener_propiedad_long( 'p_activ_' + ls_id , 'y' )
-		wf_conf_propiedad_long( 't_accion_' + ls_id , 'x',  String ( il_x_move + 40 ) )
-		wf_conf_propiedad_long( 't_accion_' + ls_id , 'y',  String ( il_y_move + 80) )
+		il_x_move = uof_get_property_long( 'p_activ_' + ls_id , 'x' )
+		il_y_move = uof_get_property_long( 'p_activ_' + ls_id , 'y' )
+		uof_set_property_long( 't_accion_' + ls_id , 'x',  String ( il_x_move + 40 ) )
+		uof_set_property_long( 't_accion_' + ls_id , 'y',  String ( il_y_move + 80) )
 	ElseIf Mid ( as_nombre, 1, 9) = 't_accion_' then
 		ls_id = mid ( as_nombre, 10, 50)
-		il_x_move = wf_obtener_propiedad_long( 't_accion_' + ls_id , 'x' )
-		il_y_move = wf_obtener_propiedad_long( 't_accion_' + ls_id , 'y' )
-		wf_conf_propiedad_long( 'p_activ_' + ls_id , 'x',  String ( il_x_move - 40) )
-		wf_conf_propiedad_long( 'p_activ_' + ls_id , 'y',  String ( il_y_move - 80) )
+		il_x_move = uof_get_property_long( 't_accion_' + ls_id , 'x' )
+		il_y_move = uof_get_property_long( 't_accion_' + ls_id , 'y' )
+		uof_set_property_long( 'p_activ_' + ls_id , 'x',  String ( il_x_move - 40) )
+		uof_set_property_long( 'p_activ_' + ls_id , 'y',  String ( il_y_move - 80) )
 	End If 
 	li_id = Long ( ls_id )
-//	If li_id > 0 Then  wf_posicion( li_id, xpos, ypos )
-	If li_id > 0 Then  wf_posicion( li_id, il_x_move, il_y_move )
+//	If li_id > 0 Then  uof_posicion( li_id, xpos, ypos )
+	If li_id > 0 Then  uof_posicion( li_id, il_x_move, il_y_move )
 end if
 
 dw_1.setredraw( true )
